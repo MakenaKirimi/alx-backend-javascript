@@ -1,76 +1,51 @@
-// Task #1
-interface Teacher {
-    readonly firstName: string;
-    readonly lastName: string;
-    fullTimeEmployee: boolean;
-    yearsOfExperience?: number;
-    location: string;
-    [key: string]: any;
+export interface Teacher {
+  readonly firstName: string;
+  readonly lastName: string;
+  fullTimeEmployee: boolean;
+  yearsOfExperience?: number;
+  location: string;
+  [index:string]: any;
+}
+
+export interface Directors extends Teacher {
+  numberOfReports: number;
+}
+
+export interface printTeacherFunction {
+  (firstName: string, lastName: string): string;
+}
+
+export function printTeacher(firstName: string, lastName: string): string {
+  return `${firstName[0]}. ${lastName}`;
+}
+
+export interface IStudentClassConstructor {
+  new (firstName: string, lastName: string): IStudentClass;
+}
+
+export interface IStudentClass {
+  workOnHomework(): string;
+  displayName(): string;
+}
+
+export class StudentClass implements IStudentClass {
+  private _firstName!: string;
+  private _lastName!: string;
+
+  constructor(firstName: string, lastName: string) {
+    this._firstName = firstName;
+    this._lastName = lastName;
   }
-  
-  const teacher3: Teacher = {
-    firstName: 'John',
-    fullTimeEmployee: false,
-    lastName: 'Doe',
-    location: 'London',
-    contract: false,
-  };
-  console.log(teacher3);
-  
-  
-  // Task #2
-  interface Directors extends Teacher {
-    numberOfReports: number;
+
+  workOnHomework() {
+    return 'Currently working';
   }
-  
-  const director1: Directors = {
-    firstName: 'John',
-    lastName: 'Doe',
-    location: 'London',
-    fullTimeEmployee: true,
-    numberOfReports: 17,
-  };
-  console.log(director1);
-  
-  
-  // Task #3
-  interface printTeacherFunction {
-    (firstName: string, lastName: string): string;
+
+  displayName() {
+    return this._firstName;
   }
-  
-  const printTeacher: printTeacherFunction = (firstName, lastName) => {
-    return `${firstName[0]}. ${lastName}`
-  }
-  console.log(printTeacher("John", "Doe"));
-  
-  
-  // Task #4
-  interface ClassStudent {
-    firstName: string;
-    lastName: string;
-    workOnHomework: () => string;
-    displayName: () => string;
-  }
-  
-  class StudentClass implements ClassStudent {
-    firstName: string;
-    lastName: string;
-  
-    constructor(firstName: string, lastName: string) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-    }
-  
-    workOnHomework(): string {
-      return 'Currently working';
-    }
-  
-    displayName(): string {
-      return this.firstName;
-    }
-  }
-  
-  const new_student: StudentClass = new StudentClass('Stacaesar', 'Zenkaiger');
-  console.log(new_student);
-  console.log(new_student.workOnHomework());
-  console.log(new_student.displayName());
+}
+
+export function createStudent(ctor: IStudentClassConstructor, firstName: string, lastName: string): IStudentClass {
+  return new ctor(firstName, lastName);
+}
